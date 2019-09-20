@@ -3,10 +3,11 @@ import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 import user as usr
 
-
+#задаем переменные ддя пути к базе
 DB_PATH = "sqlite:///sochi_athletes.sqlite3"
 Base = declarative_base()
 
+#описываем таблиук атлеты для дальнейшей работы
 class Athelete(Base):
 
     __tablename__ = 'athelete'
@@ -25,16 +26,18 @@ class Athelete(Base):
     sport = sa.Column(sa.Text)
     country = sa.Column(sa.Text)
 
+#функция заспрос id
 def ask():
     user_id = input("Введи идентификатор пользователя: ")
     return int(user_id)
-
+#кончертер даты из строки в datetime формат
 def convert_str_to_date(date_str):
     parts = date_str.split("-")
     date_parts = map(int, parts)
     date = datetime.date(*date_parts)
     return date
 
+#функиуя поиска ближайщего по дате рождения юзера
 def close_by_bd(user, session):
     athletes_list = session.query(Athelete).all()
     athlete_id_bd = {}
@@ -54,7 +57,7 @@ def close_by_bd(user, session):
 
     return athlete_id, athlete_bd
 
-
+#функиуя поиска ближайщего по росту  юзера
 def close_by_height(user, session):
     athletes_list = session.query(Athelete).filter(Athelete.height != None).all()
     atlhete_id_height = {athlete.id: athlete.height for athlete in athletes_list}
@@ -72,10 +75,11 @@ def close_by_height(user, session):
             athlete_height = height
 
     return athlete_id, athlete_height
+
 def main():
 
-    session = usr.connect_db()
-    user_id = ask()
+    session = usr.connect_db() #испольдуем функцию из модуля юзер
+    user_id = ask() #запращиваем  id
     user = session.query(Athelete).filter(Athelete.id == user_id).first()
     print("Исхрдные данные для id ={id} c датой {date} и ростом {height}".format(id=user.id,
                                                                         date=user.birthdate,
