@@ -1,6 +1,5 @@
 import datetime
 import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import user as usr
 
